@@ -1,8 +1,9 @@
 'use server'
 
-import { revalidatePath } from "next/cache"
-import User from "../models/user.model"
-import { connectToDB } from "../mongoose"
+import { revalidatePath } from 'next/cache'
+import User from '../models/user.model'
+import { connectToDB } from '../mongoose'
+import Thread from '../models/thread.model';
 
 export async function fetchUser(userId: string) {
     try {
@@ -40,4 +41,30 @@ export async function updateUser({userId, name, username, bio, image, path}: Par
         console.log('Error to update user', err)
         throw new Error('Failed to create/update user')
     }
+}
+
+export async function fetchUserPosts(userId: string) {
+  try {
+    connectToDB()
+
+    const threads = await User.findOne({ id: userId }).populate({
+      path: 'threads',
+      model: Thread,
+      populate: [
+        {
+          path: 'children',
+          model: Thread,
+          populate: {
+            path: 'author',
+            model: User,
+            select: 'name image id',
+          },
+        },
+      ],
+    });
+    return threads;
+  } catch (error) {
+    console.error('Error fetching user threads:', error)
+    throw new Error('Error fetching user threads')
+  }
 }
