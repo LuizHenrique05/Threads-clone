@@ -36,7 +36,8 @@ export async function updateUser({userId, name, username, bio, image, path}: Par
         }, { upsert: true })
     
         if (path === '/profile/edit') revalidatePath(path)
-    } catch (error: any) {
-        throw new Error(`Failed to create/update user: ${error.message}`)
+    } catch (err) {
+        console.log('Error to update user', err)
+        throw new Error('Failed to create/update user')
     }
 }
