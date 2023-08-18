@@ -50,9 +50,14 @@ const ThreadCard = ({ id, userId, parentId, content, author, community, createdA
 
                         <div className={`${isComment && "mb-10"} mt-5 flex flex-col gap-3`}>
                             <div className="flex gap-3.5">
-                                <Image src="/assets/heart-gray.svg" alt="favorite icon" width={24} height={24} className="cursor-pointer object-contain" />
-                                <Link href={`/thread/${id}`}>
+                                <Image src="/assets/heart-gray.svg" alt="like icon" width={24} height={24} className="cursor-pointer object-contain" />
+                                <Link href={`/thread/${id}`} className="flex items-center justify-center">
                                     <Image src="/assets/reply.svg" alt="reply icon" width={24} height={24} className="cursor-pointer object-contain" />
+                                    <p className="ml-1 text-subtle-medium text-gray-1">
+                                        {comments.length >= 1000 
+                                            ? (comments.length / 1000) + 'k' 
+                                            : comments.length}
+                                    </p>
                                 </Link>
                                 <Image src="/assets/repost.svg" alt="respost icon" width={24} height={24} className="cursor-pointer object-contain" />
                                 <Image src="/assets/share.svg" alt="share icon" width={24} height={24} className="cursor-pointer object-contain" />
