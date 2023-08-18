@@ -16,7 +16,7 @@ export async function createCommunity( id: string, name: string, username: strin
 
     if (!user) throw new Error('User not found')
 
-    const newCommunity = new Community({ id, name, username, image, bio, createdBy: user._id, })
+    const newCommunity = new Community({ id, name, username, image, bio, createdBy: user._id })
 
     const createdCommunity = await newCommunity.save()
 

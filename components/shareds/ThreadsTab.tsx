@@ -1,50 +1,48 @@
-import { redirect } from "next/navigation";
+import { redirect } from 'next/navigation'
 
-import { fetchUserPosts } from "@/lib/actions/user.actions";
+import { fetchUserThreads } from '@/lib/actions/user.actions'
 
-import ThreadCard from "../cards/ThreadCard";
+import ThreadCard from '../cards/ThreadCard'
 
 interface Result {
-  name: string;
-  image: string;
-  id: string;
+  name: string
+  image: string
+  id: string
   threads: {
-    _id: string;
-    text: string;
-    parentId: string | null;
+    _id: string
+    text: string
+    parentId: string | null
     author: {
-      name: string;
-      image: string;
-      id: string;
-    };
+      name: string
+      image: string
+      id: string
+    }
     community: {
-      id: string;
-      name: string;
-      image: string;
-    } | null;
-    createdAt: string;
+      id: string
+      name: string
+      image: string
+    } | null
+    createdAt: string
     children: {
       author: {
-        image: string;
-      };
-    }[];
-  }[];
+        image: string
+      }
+    }[]
+  }[]
 }
 
 interface Props {
-  currentUserId: string;
-  accountId: string;
-  accountType: string;
+  currentUserId: string
+  accountId: string
+  accountType: string
 }
 
 async function ThreadsTab({ currentUserId, accountId, accountType }: Props) {
-  let result: Result;
+  let result: Result
 
-  result = await fetchUserPosts(accountId);
+  result = await fetchUserThreads(accountId)
 
-  if (!result) {
-    redirect("/");
-  }
+  if (!result) redirect('/')
 
   return (
     <section className='mt-9 flex flex-col gap-10'>
@@ -56,7 +54,7 @@ async function ThreadsTab({ currentUserId, accountId, accountType }: Props) {
           parentId={thread.parentId}
           content={thread.text}
           author={
-            accountType === "User"
+            accountType === 'User'
               ? { name: result.name, image: result.image, id: result.id }
               : {
                   name: thread.author.name,
@@ -65,7 +63,7 @@ async function ThreadsTab({ currentUserId, accountId, accountType }: Props) {
                 }
           }
           community={
-            accountType === "Community"
+            accountType === 'Community'
               ? { name: result.name, id: result.id, image: result.image }
               : thread.community
           }
@@ -74,7 +72,7 @@ async function ThreadsTab({ currentUserId, accountId, accountType }: Props) {
         />
       ))}
     </section>
-  );
+  )
 }
 
-export default ThreadsTab;
+export default ThreadsTab
