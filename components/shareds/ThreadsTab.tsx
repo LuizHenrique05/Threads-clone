@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation'
 import { fetchUserThreads } from '@/lib/actions/user.actions'
 
 import ThreadCard from '../cards/ThreadCard'
+import { fetchCommunityThreads } from '@/lib/actions/community.actions'
 
 interface Result {
   name: string
@@ -42,7 +43,11 @@ async function ThreadsTab({ currentUserId, accountId, accountType }: Props) {
 
   result = await fetchUserThreads(accountId)
 
-  if (!result) redirect('/')
+  if (accountType === "Community") {
+    result = await fetchCommunityThreads(accountId);
+  } else {
+    result = await fetchUserThreads(accountId);
+  }
 
   return (
     <section className='mt-9 flex flex-col gap-10'>
